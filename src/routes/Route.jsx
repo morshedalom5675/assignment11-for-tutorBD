@@ -3,6 +3,17 @@ import MainLayout from "../Layouts/MainLayout";
 import Register from "../pages/Auth/Register/Register";
 import Login from "../pages/Auth/Login/Login";
 import LoadingSpinner from "../components/LoadingSpinner";
+import Tuitions from "../pages/Tuitions/Tuitions";
+import Tutors from "../pages/Tutors/Tutors";
+import About from "../pages/About/About";
+import Contacts from "../pages/Contacts/Contacts";
+import Home from "../pages/Home/Home/Home";
+import DashboardLayout from "../Layouts/DashboardLayout";
+import ProfileSettings from "../pages/Dashboard/CommonItems/ProfileSettings";
+import MyTuitions from "../pages/Dashboard/StudentsRole/MyTuitions";
+import PostTuition from "../pages/Dashboard/StudentsRole/PostTuitions";
+import AppliedTutors from "../pages/Dashboard/StudentsRole/AppliedTutors";
+import Payments from "../pages/Dashboard/StudentsRole/Payments";
 
 const router = createBrowserRouter([
   {
@@ -11,6 +22,10 @@ const router = createBrowserRouter([
     hydrateFallbackElement: <LoadingSpinner></LoadingSpinner>,
     children: [
       {
+        index: true,
+        Component: Home,
+      },
+      {
         path: "register",
         Component: Register,
       },
@@ -18,6 +33,48 @@ const router = createBrowserRouter([
         path: "login",
         Component: Login,
       },
+      {
+        path: "tuitions",
+        Component: Tuitions,
+      },
+      {
+        path: "tutors",
+        Component: Tutors,
+      },
+      {
+        path: "about",
+        Component: About,
+      },
+      {
+        path: "contact",
+        Component: Contacts,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    Component: DashboardLayout,
+    children: [
+      {
+        path: "/dashboard/profile",
+        Component: ProfileSettings,
+      },
+      {
+        path: '/dashboard/student/my-tuitions',
+        Component:MyTuitions
+      },
+      {
+        path: '/dashboard/student/post-tuition',
+        Component:PostTuition
+      },
+      {
+        path:'/dashboard/student/applied-tutors',
+        Component:AppliedTutors
+      },
+      {
+        path: '/dashboard/student/payments',
+        Component:Payments
+      }
     ],
   },
 ]);

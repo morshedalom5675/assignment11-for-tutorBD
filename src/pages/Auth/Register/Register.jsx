@@ -12,7 +12,7 @@ import {
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
-import axios from "axios";
+// import axios from "axios";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { imageUpload } from "../../../utils/utils";
 import SocialLogin from "../SocialLogin/Sociallogin";
