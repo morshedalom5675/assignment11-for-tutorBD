@@ -1,6 +1,8 @@
 import React from "react";
 import { NavLink, Link } from "react-router";
 import { IoIosSchool } from "react-icons/io";
+import { House, Users, Phone, Info, NotebookPen } from "lucide-react";
+
 import useAuth from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
 import { TbFidgetSpinner } from "react-icons/tb";
@@ -14,27 +16,58 @@ const Navbar = () => {
       Logout();
       toast.success("Logout success");
     } catch (error) {
-      console.log(error);
       toast.error(error.message);
     }
   };
+
   // Main Navigation Links
   const navLinks = (
     <>
       <li>
-        <NavLink to="/">Home</NavLink>
+        <NavLink to="/" className="nav-link flex items-center gap-2 px-3 py-2">
+          <House className="w-4 h-4 text-primary" />
+          Home
+        </NavLink>
       </li>
+
       <li>
-        <NavLink to="/tuitions">Tuitions</NavLink>
+        <NavLink
+          to="/tuitions"
+          className="nav-link flex items-center gap-2 px-3 py-2"
+        >
+          <NotebookPen className="w-4 h-4 text-primary" />
+          Tuitions
+        </NavLink>
       </li>
+
       <li>
-        <NavLink to="/tutors">Tutors</NavLink>
+        <NavLink
+          to="/tutors"
+          className="nav-link flex items-center gap-2 px-3 py-2"
+        >
+          <Users className="w-4 h-4 text-primary" />
+          Tutors
+        </NavLink>
       </li>
+
       <li>
-        <NavLink to="/about">About</NavLink>
+        <NavLink
+          to="/about"
+          className="nav-link flex items-center gap-2 px-3 py-2"
+        >
+          <Info className="w-4 h-4 text-primary" />
+          About
+        </NavLink>
       </li>
+
       <li>
-        <NavLink to="/contact">Contact</NavLink>
+        <NavLink
+          to="/contact"
+          className="nav-link flex items-center gap-2 px-3 py-2"
+        >
+          <Phone className="w-4 h-4 text-primary" />
+          Contact
+        </NavLink>
       </li>
     </>
   );
@@ -82,15 +115,15 @@ const Navbar = () => {
 
       {/* CENTER */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 font-medium">{navLinks}</ul>
+        <ul className="menu menu-horizontal px-1 font-medium space-x-1">
+          {navLinks}
+        </ul>
       </div>
 
       {/* RIGHT */}
       <div className="navbar-end space-x-2">
         {user ? (
-          // ⭐ USER LOGGED IN
           <div className="flex items-center space-x-3">
-            {/* Dashboard Button (Desktop Only) */}
             <Link
               to="/dashboard"
               className="btn btn-sm btn-primary btn-outline hidden md:flex transition-all duration-300"
@@ -98,13 +131,12 @@ const Navbar = () => {
               Dashboard
             </Link>
 
-            {/* Avatar Dropdown */}
+            {/* Avatar */}
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
                 role="button"
-                className="btn btn-ghost btn-circle avatar border-2 border-primary p-0 
-                  hover:shadow-xl hover:border-primary/80 transition-all duration-300"
+                className="btn btn-ghost btn-circle avatar border-2 border-primary p-0 hover:shadow-xl transition-all"
               >
                 <div className="w-10 rounded-full overflow-hidden">
                   <img src={userPhoto} alt="User" />
@@ -113,44 +145,21 @@ const Navbar = () => {
 
               <ul
                 tabIndex={0}
-                className="
-                  menu menu-sm dropdown-content 
-                  mt-3 w-56 p-3 z-50
-                  rounded-xl shadow-2xl border border-base-300 
-                  bg-gradient-to-br from-base-100 to-base-200
-                  backdrop-blur-sm
-                "
+                className="menu menu-sm dropdown-content mt-3 w-56 p-3 shadow-2xl rounded-xl bg-base-100 border"
               >
-                {/* Header */}
-                <li className="menu-title px-2 py-2 rounded-md bg-primary/10 text-primary font-bold text-base mb-2">
-                  <span>Hi, {user?.displayName || "User"}! 👋</span>
+                <li className="menu-title bg-primary/10 rounded-md p-2 text-primary font-bold">
+                  Hi, {user?.displayName || "User"} 👋
                 </li>
-
-                {/* Dashboard */}
                 <li>
-                  <Link
-                    to="/dashboard"
-                    className="hover:bg-secondary/10 rounded-md transition-all"
-                  >
-                    Dashboard
-                  </Link>
+                  <Link to="/dashboard">Dashboard</Link>
                 </li>
-
-                {/* Profile Settings */}
                 <li>
-                  <Link
-                    to="/profile-settings"
-                    className="hover:bg-primary/10 rounded-md transition-all"
-                  >
-                    Profile Settings
-                  </Link>
+                  <Link to="/profile-settings">Profile Settings</Link>
                 </li>
-
-                {/* Logout */}
                 <li className="border-t mt-2 pt-2">
                   <button
                     onClick={userLogout}
-                    className="btn btn-primary btn-sm w-full rounded-md text-white font-medium hover:brightness-110 transition-all duration-200"
+                    className="btn btn-primary btn-sm w-full"
                   >
                     Logout
                   </button>
@@ -161,19 +170,11 @@ const Navbar = () => {
         ) : loading ? (
           <TbFidgetSpinner className="animate-spin text-xl text-primary mr-10" />
         ) : (
-          // ⭐ NO USER → Login + Register Buttons
           <div className="flex items-center space-x-2">
-            <Link
-              to="/login"
-              className="btn btn-sm btn-ghost hidden lg:flex hover:bg-primary/10 transition-all"
-            >
+            <Link to="/login" className="btn btn-sm btn-ghost hidden lg:flex">
               Login
             </Link>
-
-            <Link
-              to="/register"
-              className="btn btn-sm btn-primary hover:shadow-md transition-all"
-            >
+            <Link to="/register" className="btn btn-sm btn-primary">
               Register
             </Link>
           </div>

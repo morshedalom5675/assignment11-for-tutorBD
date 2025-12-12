@@ -4,7 +4,20 @@
   name: "light";
   default: true;
 
-  --color-primary: #2563eb;     
-  --color-secondary: #0ea5e9;   
-  --color-accent: #8b5cf6;     
+  --color-primary: #2563eb;
+  --color-secondary: #0ea5e9;
+  --color-accent: #8b5cf6;
+}
+.active {
+  @apply bg-primary text-white rounded-lg shadow-md transition-all duration-200;
+}
+
+/* Icon white when active */
+.active svg {
+  @apply text-white stroke-white;
+}
+
+/* ==== Hover (when not active) ==== */
+.nav-link:hover:not(.active) {
+  @apply bg-gray-100 rounded-lg;
 }

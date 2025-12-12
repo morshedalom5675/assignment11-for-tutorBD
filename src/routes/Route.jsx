@@ -14,6 +14,7 @@ import MyTuitions from "../pages/Dashboard/StudentsRole/MyTuitions";
 import PostTuition from "../pages/Dashboard/StudentsRole/PostTuitions";
 import AppliedTutors from "../pages/Dashboard/StudentsRole/AppliedTutors";
 import Payments from "../pages/Dashboard/StudentsRole/Payments";
+import TuitionDetails from "../components/Home/TuitionDetails";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "tuitions",
         Component: Tuitions,
+      },
+      {
+        path: '/tuitionDetails/:id',
+        Component:TuitionDetails
       },
       {
         path: "tutors",
