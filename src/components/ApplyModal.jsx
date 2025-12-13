@@ -13,6 +13,7 @@ const ApplyModal = ({ isOpen, closeModal, tuitionId }) => {
 
   const submitForm = (data) => {
     console.log(data);
+    closeModal()
   };
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -79,33 +80,36 @@ const ApplyModal = ({ isOpen, closeModal, tuitionId }) => {
                 <div>
                   <label className="label font-medium">Qualifications</label>
                   <input
-                    {...register("qualification")}
+                    {...register("qualification",{required:'Qualifications is required'})}
                     type="text"
                     placeholder="Your qualification"
                     className="input input-bordered w-full"
                   />
+                   {errors.qualification && <p className="text-red-500 mt-2">{errors.qualification.message }</p>}
                 </div>
 
                 {/* Experience */}
                 <div>
                   <label className="label font-medium">Experience</label>
                   <input
-                    {...register("experience")}
+                    {...register("experience",{required:'Experience is required'})}
                     type="text"
                     placeholder="Years of experience"
                     className="input input-bordered w-full"
                   />
+                  {errors.experience && <p className="text-red-500 mt-2">{errors.experience.message }</p>}
                 </div>
 
                 {/* Expected Salary */}
                 <div>
                   <label className="label font-medium">Expected Salary</label>
                   <input
-                    {...register("expectedSalary")}
+                    {...register("expectedSalary",{required:'Expected Salary is required'})}
                     type="number"
                     placeholder="Expected salary"
                     className="input input-bordered w-full"
                   />
+                  {errors.expectedSalary && <p className="text-red-500 mt-2">{errors.expectedSalary.message }</p>}
                 </div>
 
                 {/* Buttons */}

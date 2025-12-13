@@ -16,6 +16,8 @@ import { toast } from "react-toastify";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { imageUpload } from "../../../utils/utils";
 import SocialLogin from "../SocialLogin/Sociallogin";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 const Register = () => {
   const {
@@ -27,9 +29,17 @@ const Register = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state || "/";
-  const onsubmit = async (data) => {
-    const { name, image, email, password } = data;
+
+  const { mutateAsync } = useMutation({
+    mutationKey: ["user"],
+    mutationFn: async (user) =>
+      await axios.post(`${import.meta.env.VITE_API_URL}/users`, user),
+  });
+
+  const onSubmit = async (data) => {
+    const { name, image, email, password,phone } = data;
     const imageFile = image[0];
+
     // const formData = new FormData();
     // formData.append("image", imageFile);
 
@@ -43,6 +53,14 @@ const Register = () => {
       const imageURL = await imageUpload(imageFile);
       const result = await createUser(email, password);
       console.log(result.user);
+      const user = {
+        name,
+        email,
+        image: imageURL,
+        phone,
+      };
+      console.log(user)
+      mutateAsync(user);
       await updateUser(name, imageURL);
       toast.success("SignUp successful");
       navigate(from, { replace: true });
@@ -73,7 +91,7 @@ const Register = () => {
         </div>
 
         {/* Registration Form Area (Using a standard <form> tag) */}
-        <form onSubmit={handleSubmit(onsubmit)} className="p-6 md:p-10 ">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-6 md:p-10 ">
           <div className="space-y-4">
             {/* Name */}
             <div className="form-control">

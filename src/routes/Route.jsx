@@ -15,6 +15,7 @@ import PostTuition from "../pages/Dashboard/StudentsRole/PostTuitions";
 import AppliedTutors from "../pages/Dashboard/StudentsRole/AppliedTutors";
 import Payments from "../pages/Dashboard/StudentsRole/Payments";
 import TuitionDetails from "../components/Home/TuitionDetails";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -39,8 +40,12 @@ const router = createBrowserRouter([
         Component: Tuitions,
       },
       {
-        path: '/tuitionDetails/:id',
-        Component:TuitionDetails
+        path: "/tuitionDetails/:id",
+        element: (
+          <PrivateRoute>
+            <TuitionDetails></TuitionDetails>
+          </PrivateRoute>
+        ),
       },
       {
         path: "tutors",
@@ -65,21 +70,21 @@ const router = createBrowserRouter([
         Component: ProfileSettings,
       },
       {
-        path: '/dashboard/student/my-tuitions',
-        Component:MyTuitions
+        path: "/dashboard/student/my-tuitions",
+        Component: MyTuitions,
       },
       {
-        path: '/dashboard/student/post-tuition',
-        Component:PostTuition
+        path: "/dashboard/student/post-tuition",
+        Component: PostTuition,
       },
       {
-        path:'/dashboard/student/applied-tutors',
-        Component:AppliedTutors
+        path: "/dashboard/student/applied-tutors",
+        Component: AppliedTutors,
       },
       {
-        path: '/dashboard/student/payments',
-        Component:Payments
-      }
+        path: "/dashboard/student/payments",
+        Component: Payments,
+      },
     ],
   },
 ]);
