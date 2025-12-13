@@ -3,7 +3,6 @@ import { Award, Zap, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 
 const HeroSection = () => {
-  // Framer Motion Variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -23,7 +22,6 @@ const HeroSection = () => {
     },
   };
 
-  // Feature cards data
   const featureCards = [
     {
       icon: Award,
@@ -59,15 +57,15 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
 
       {/* Content */}
-      <div className="px-25 py-20 relative z-10">
+      <div className="px-4 md:px-25 py-20 relative z-10">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={containerVariants}
-          className="flex flex-col lg:flex-row items-center gap-14"
+          className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20"
         >
           {/* Left Content */}
-          <div className="lg:w-1/2 text-center lg:text-left">
+          <div className="lg:w-1/2 w-full text-center lg:text-left">
             <motion.p
               variants={itemVariants}
               className="text-secondary font-semibold text-lg mb-3 uppercase tracking-wider"
@@ -77,16 +75,16 @@ const HeroSection = () => {
 
             <motion.h1
               variants={itemVariants}
-              className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-gray-800 leading-tight mb-6"
+              className="text-3xl sm:text-4xl lg:text-6xl font-extrabold text-gray-800 leading-tight mb-6"
             >
-              The <span className="text-primary">Easiest Way</span> to Find{" "}
-              <br />
+              The <span className="text-primary">Easiest Way</span> to Find
+              <br className="hidden sm:block" />
               Verified Tutors
             </motion.h1>
 
             <motion.p
               variants={itemVariants}
-              className="text-lg sm:text-xl text-gray-600 mb-8 max-w-xl mx-auto lg:mx-0"
+              className="text-base sm:text-lg text-gray-600 mb-8 max-w-md sm:max-w-lg mx-auto lg:mx-0"
             >
               Connect with thousands of verified tutors and students in one
               integrated platform. Your next tuition opportunity is just a click
@@ -96,9 +94,9 @@ const HeroSection = () => {
             {/* CTA Buttons */}
             <motion.div
               variants={itemVariants}
-              className="flex justify-center lg:justify-start gap-4"
+              className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4"
             >
-              <button className="btn btn-primary btn-lg shadow-lg hover:scale-105 transition">
+              <button className="btn btn-primary btn-lg shadow-lg hover:scale-105 transition mb-3 sm:mb-0">
                 Find Tutors
               </button>
 
@@ -109,12 +107,12 @@ const HeroSection = () => {
           </div>
 
           {/* Right Feature Cards */}
-          <div className="lg:w-1/2 w-full">
+          <div className="lg:w-1/2 w-full mt-10 lg:mt-0">
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className="space-y-6"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6"
             >
               {featureCards.map((feature, index) => {
                 const Icon = feature.icon;
