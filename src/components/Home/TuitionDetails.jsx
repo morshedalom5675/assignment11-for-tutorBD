@@ -1,4 +1,6 @@
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import React, { useState } from "react";
 import {
   FaMapMarkerAlt,
   FaMoneyBill,
@@ -6,8 +8,37 @@ import {
   FaUser,
   FaClock,
 } from "react-icons/fa";
+import { useParams } from "react-router";
+import LoadingSpinner from "../LoadingSpinner";
+import useAuth from "../../hooks/useAuth";
+import ApplyModal from "../ApplyModal";
 
 const TuitionDetails = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
+  const { id } = useParams();
+  const {
+    data: plant = [],
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["tuition", id],
+    queryFn: async () => {
+      const res = await axios(`${import.meta.env.VITE_API_URL}/tuitions/${id}`);
+      return res.data;
+    },
+  });
+  const {
+    name,
+    email,
+    level,
+    description,
+    subject,
+    location,
+    budget,
+    daysPerWeek,
+  } = plant || {};
+  if (isLoading) return <LoadingSpinner></LoadingSpinner>;
   return (
     <div className="max-w-5xl mx-auto p-5 mt-6 mb-12">
       {/* Main Card */}
@@ -21,7 +52,7 @@ const TuitionDetails = () => {
         <div className="p-6 space-y-6">
           {/* Title */}
           <h2 className="text-3xl font-extrabold text-gray-900">
-            Subject Name Here
+            Subject Name : {subject}
           </h2>
 
           {/* Meta Info Grid */}
@@ -30,7 +61,7 @@ const TuitionDetails = () => {
               <FaBook className="text-primary text-xl" />
               <div>
                 <h4 className="font-semibold">Class</h4>
-                <p className="text-gray-600">Class 8</p>
+                <p className="text-gray-600">{level}</p>
               </div>
             </div>
 
@@ -38,7 +69,7 @@ const TuitionDetails = () => {
               <FaMapMarkerAlt className="text-primary text-xl" />
               <div>
                 <h4 className="font-semibold">Location</h4>
-                <p className="text-gray-600">Mirpur, Dhaka</p>
+                <p className="text-gray-600">{location}</p>
               </div>
             </div>
 
@@ -46,7 +77,7 @@ const TuitionDetails = () => {
               <FaMoneyBill className="text-primary text-xl" />
               <div>
                 <h4 className="font-semibold">Budget</h4>
-                <p className="text-gray-600">6000 Tk</p>
+                <p className="text-gray-600">{budget} Tk / month</p>
               </div>
             </div>
 
@@ -54,7 +85,7 @@ const TuitionDetails = () => {
               <FaClock className="text-primary text-xl" />
               <div>
                 <h4 className="font-semibold">Schedule</h4>
-                <p className="text-gray-600">3 Days / Week</p>
+                <p className="text-gray-600">{daysPerWeek} Days / Week</p>
               </div>
             </div>
           </div>
@@ -65,32 +96,34 @@ const TuitionDetails = () => {
           {/* Description */}
           <div>
             <h3 className="text-xl font-bold mb-2">Tuition Description</h3>
-            <p className="text-gray-700 leading-relaxed">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              euismod libero ut sollicitudin tempus. Integer vitae metus ut
-              ligula vehicula hendrerit. Duis vitae pretium lectus.
-            </p>
+            <p className="text-gray-700 leading-relaxed">{description}</p>
           </div>
 
           {/* Posted By */}
           <div className="p-4 bg-gray-50 border rounded-xl flex items-center gap-4">
             <img
-              src="https://i.ibb.co/Zm0mF7R/user.png"
+              src={user?.photoURL}
+              referrerPolicy="no-referrer"
               className="w-14 h-14 rounded-full border"
               alt="User"
             />
             <div>
-              <h4 className="font-bold text-lg">Posted By: Student Name</h4>
-              <p className="text-gray-600 text-sm">Posted on: 12 Dec 2024</p>
+              <h4 className="font-bold text-lg">Posted By: {name}</h4>
+              <p className="text-gray-600 text-sm">Email: {email}</p>
             </div>
           </div>
 
           {/* Buttons */}
           <div className="flex items-center gap-4 pt-4">
-            <button className="btn btn-primary px-6 rounded-lg">
+            <button
+              onClick={() => setIsOpen(true)}
+              className="btn btn-primary px-6 rounded-lg"
+            >
               Apply as Tutor
             </button>
 
+            <ApplyModal tuitionId={id} isOpen={isOpen} closeModal={() => setIsOpen(false)} />
+            
             <button className="btn btn-outline btn-primary px-6 rounded-lg">
               Save / Bookmark
             </button>
