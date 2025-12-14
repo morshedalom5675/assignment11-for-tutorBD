@@ -2,6 +2,7 @@ import React from "react";
 import useAuth from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router";
+import axios from "axios";
 
 const SocialLogin = () => {
   const { googleLogin } = useAuth();
@@ -11,8 +12,26 @@ const SocialLogin = () => {
   const from = location.state || "/";
   const handleGoogleLogin = async () => {
     try {
-      const result = await googleLogin();
-      console.log(result);
+      await googleLogin()
+        .then((res) => {
+          console.log(res.user);
+          // create user to data base
+          const userInfo = {
+            email: res.user.email,
+            displayName: res.user.name,
+            photoURL: res.user.photoURL,
+            phone: "",
+            role: "student",
+          };
+          axios
+            .post(`${import.meta.env.VITE_API_URL}/users`, userInfo)
+            .then((res) => {
+              console.log("user data base a exist", res.data);
+            });
+          navigate(from, { replace: true });
+        })
+        .catch((err) => console.log(err));
+
       navigate(from, { replace: true });
       toast.success("Google Login success");
     } catch (error) {

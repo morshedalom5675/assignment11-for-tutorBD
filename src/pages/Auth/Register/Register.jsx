@@ -8,6 +8,8 @@ import {
   FaLock,
   FaEnvelope,
   FaPhone,
+  FaUserGraduate,
+  FaChalkboardTeacher,
 } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
@@ -37,8 +39,9 @@ const Register = () => {
   });
 
   const onSubmit = async (data) => {
-    const { name, image, email, password,phone } = data;
+    const { name, image, email, password, phone ,role} = data;
     const imageFile = image[0];
+    console.log(data)
 
     // const formData = new FormData();
     // formData.append("image", imageFile);
@@ -58,8 +61,9 @@ const Register = () => {
         email,
         image: imageURL,
         phone,
+        role
       };
-      console.log(user)
+      console.log(user);
       mutateAsync(user);
       await updateUser(name, imageURL);
       toast.success("SignUp successful");
@@ -93,7 +97,47 @@ const Register = () => {
         {/* Registration Form Area (Using a standard <form> tag) */}
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 md:p-10 ">
           <div className="space-y-4">
-            {/* Name */}
+            {/* role */}
+            <div className="form-control mb-6">
+              <label className="label">
+                <span className="label-text font-semibold text-gray-700">
+                  Select Role *
+                </span>
+              </label>
+              <div className="flex space-x-4 mb-6">
+                {/* Student */}
+                <label className="flex-1 cursor-pointer">
+                  <input
+                    {...register('role')}
+                    type="radio"
+                    name="role"
+                    value="student"
+                    defaultChecked
+                    className="hidden peer"
+                  />
+                  <div className="flex items-center justify-center space-x-2 btn btn-outline btn-primary peer-checked:bg-primary peer-checked:text-white transition-all">
+                    <FaUserGraduate />
+                    <span>Student</span>
+                  </div>
+                </label>
+
+                {/* Tutor */}
+                <label className="flex-1 cursor-pointer">
+                  <input
+                    {...register('role')}
+                    type="radio"
+                    name="role"
+                    value="tutor"
+                    className="hidden peer"
+                  />
+                  <div className="flex items-center justify-center space-x-2 btn btn-outline btn-primary peer-checked:bg-primary peer-checked:text-white transition-all">
+                    <FaChalkboardTeacher />
+                    <span>Tutor</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            ;{/* Name */}
             <div className="form-control">
               <label className="input input-bordered flex items-center gap-3">
                 <FaUser className="h-4 w-4 text-gray-400" />
@@ -116,7 +160,6 @@ const Register = () => {
                 </p>
               )}
             </div>
-
             {/* Image */}
             <div className="form-control">
               <label className="input input-bordered flex items-center gap-3">
@@ -151,7 +194,6 @@ const Register = () => {
                 </p>
               )}
             </div>
-
             {/* Email */}
             <div className="form-control">
               <label className="input input-bordered flex items-center gap-3">
@@ -175,7 +217,6 @@ const Register = () => {
                 </p>
               )}
             </div>
-
             {/* Password */}
             <div className="form-control">
               <label className="input input-bordered flex items-center gap-3">
@@ -199,7 +240,6 @@ const Register = () => {
                 </p>
               )}
             </div>
-
             {/* Phone */}
             <div className="form-control">
               <label className="input input-bordered flex items-center gap-3">
@@ -259,28 +299,3 @@ const Register = () => {
 export default Register;
 
 // role
-
-//   <div className="form-control mb-6">
-//     <label className="label">
-//       <span className="label-text font-semibold text-gray-700">
-//         Select Role *
-//       </span>
-//     </label>
-//     <div className="flex space-x-4">
-//       {/* Student Role Button (Design for Active State) */}
-//       <button
-//         type="button"
-//         className="flex-1 btn btn-primary transition-all duration-200"
-//       >
-//         <FaUserGraduate /> Register as Student
-//       </button>
-
-//       {/* Tutor Role Button (Design for Inactive State) */}
-//       <button
-//         type="button"
-//         className="flex-1 btn btn-outline btn-primary transition-all duration-200"
-//       >
-//         <FaChalkboardTeacher /> Register as Tutor
-//       </button>
-//     </div>
-//           </div>
