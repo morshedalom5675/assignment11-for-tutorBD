@@ -16,6 +16,7 @@ import AppliedTutors from "../pages/Dashboard/StudentsRole/AppliedTutors";
 import Payments from "../pages/Dashboard/StudentsRole/Payments";
 import TuitionDetails from "../components/Home/TuitionDetails";
 import PrivateRoute from "./PrivateRoute";
+import SuccessPayment from "../pages/Payment/SuccessPayment";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
             <TuitionDetails></TuitionDetails>
           </PrivateRoute>
         ),
+      },
+      {
+        path: "success-url",
+        Component: SuccessPayment,
       },
       {
         path: "tutors",

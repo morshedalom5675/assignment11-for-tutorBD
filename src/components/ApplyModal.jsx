@@ -2,6 +2,9 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import useAuth from "../hooks/useAuth";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const ApplyModal = ({ isOpen, closeModal, tuitionId }) => {
   const { user } = useAuth();
@@ -11,9 +14,34 @@ const ApplyModal = ({ isOpen, closeModal, tuitionId }) => {
     formState: { errors },
   } = useForm();
 
+  const { mutateAsync } = useMutation({
+    mutationFn: async (applicationData) =>
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/applications`,
+        applicationData
+      ),
+    onSuccess: () => {
+      console.log("application successfully add");
+      toast.success("Your application has been submit please wait");
+    },
+  });
+
   const submitForm = (data) => {
-    console.log(data);
-    closeModal()
+    const { tutorName, tutorEmail, qualification, experience, expectedSalary } =
+      data;
+    const tutorData = {
+      tutorName,
+      tutorEmail,
+      tutorPhoto: user?.photoURL,
+      tuitionId,
+      qualification,
+      experience,
+      expectedSalary: Number(expectedSalary),
+      status: "pending",
+      appliedAt: new Date(),
+    };
+    mutateAsync(tutorData);
+    closeModal();
   };
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -80,36 +108,54 @@ const ApplyModal = ({ isOpen, closeModal, tuitionId }) => {
                 <div>
                   <label className="label font-medium">Qualifications</label>
                   <input
-                    {...register("qualification",{required:'Qualifications is required'})}
+                    {...register("qualification", {
+                      required: "Qualifications is required",
+                    })}
                     type="text"
                     placeholder="Your qualification"
                     className="input input-bordered w-full"
                   />
-                   {errors.qualification && <p className="text-red-500 mt-2">{errors.qualification.message }</p>}
+                  {errors.qualification && (
+                    <p className="text-red-500 mt-2">
+                      {errors.qualification.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Experience */}
                 <div>
                   <label className="label font-medium">Experience</label>
                   <input
-                    {...register("experience",{required:'Experience is required'})}
+                    {...register("experience", {
+                      required: "Experience is required",
+                    })}
                     type="text"
                     placeholder="Years of experience"
                     className="input input-bordered w-full"
                   />
-                  {errors.experience && <p className="text-red-500 mt-2">{errors.experience.message }</p>}
+                  {errors.experience && (
+                    <p className="text-red-500 mt-2">
+                      {errors.experience.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Expected Salary */}
                 <div>
                   <label className="label font-medium">Expected Salary</label>
                   <input
-                    {...register("expectedSalary",{required:'Expected Salary is required'})}
+                    {...register("expectedSalary", {
+                      required: "Expected Salary is required",
+                    })}
                     type="number"
                     placeholder="Expected salary"
                     className="input input-bordered w-full"
                   />
-                  {errors.expectedSalary && <p className="text-red-500 mt-2">{errors.expectedSalary.message }</p>}
+                  {errors.expectedSalary && (
+                    <p className="text-red-500 mt-2">
+                      {errors.expectedSalary.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Buttons */}
