@@ -17,6 +17,9 @@ import Payments from "../pages/Dashboard/StudentsRole/Payments";
 import TuitionDetails from "../components/Home/TuitionDetails";
 import PrivateRoute from "./PrivateRoute";
 import SuccessPayment from "../pages/Payment/SuccessPayment";
+import MyApplications from "../pages/Dashboard/Tutor/MyApplications";
+import OngoingTuitions from "../pages/Dashboard/Tutor/OngoingTuitions";
+import RevenueHistory from "../pages/Dashboard/Tutor/RevenueHistory";
 
 const router = createBrowserRouter([
   {
@@ -90,6 +93,18 @@ const router = createBrowserRouter([
         path: "/dashboard/student/payments",
         Component: Payments,
       },
+      {
+        path: '/dashboard/tutor/my-applications',
+        Component:MyApplications
+      },
+      {
+        path: '/dashboard/tutor/ongoing-tuitions',
+        Component:OngoingTuitions
+      },
+      {
+        path: '/dashboard/tutor/revenue-history',
+        Component:RevenueHistory
+      }
     ],
   },
 ]);
