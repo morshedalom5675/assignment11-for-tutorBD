@@ -5,10 +5,13 @@ import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { useState } from "react";
 import PaymentModal from "../../../components/PaymentModal";
+import RejectModal from "../../../components/RejectModal";
 
 const AppliedTutors = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [rejectModalIsOpen, setRejectModalIsOpen] = useState(false);
   const [selectedTutor, setSelectedTutor] = useState(null);
+
   const { data: applications = [], isLoading } = useQuery({
     queryKey: ["applications"],
     queryFn: async () => {
@@ -108,6 +111,9 @@ const AppliedTutors = () => {
                   </button>
 
                   <button
+                    onClick={() => {
+                      setRejectModalIsOpen(true), setSelectedTutor(app);
+                    }}
                     disabled={app.status !== "pending"}
                     className="btn btn-error btn-sm btn-outline disabled:opacity-50"
                   >
@@ -127,6 +133,13 @@ const AppliedTutors = () => {
         }}
         tutor={selectedTutor}
       ></PaymentModal>
+      <RejectModal
+        isOpen={rejectModalIsOpen}
+        closeModal={() => {
+          setRejectModalIsOpen(false), setSelectedTutor(null);
+        }}
+        tutor={selectedTutor}
+      ></RejectModal>
     </div>
   );
 };

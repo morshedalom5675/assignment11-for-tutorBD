@@ -14,30 +14,27 @@ const PaymentModal = ({ isOpen, closeModal, tutor }) => {
     expectedSalary,
     qualification,
   } = tutor || {};
-  console.log(tuitionId)
-  console.log(_id)
 
   const handlePayment = async () => {
     const tutorInfo = {
       tutorName,
       tutorEmail,
       tutorPhoto,
-      applicationId:_id,
+      applicationId: _id,
       tuitionId,
       expectedSalary,
       student: {
         studentName: user?.displayName,
-          studentEmail: user?.email,
-          studentPhoto:user?.photoURL
-        
+        studentEmail: user?.email,
+        studentPhoto: user?.photoURL,
       },
     };
     const res = await axios.post(
       `${import.meta.env.VITE_API_URL}/create-checkout-session`,
       tutorInfo
-      );
-      window.location.href = res.data.url
-      closeModal()
+    );
+    window.location.href = res.data.url;
+    closeModal();
   };
 
   return (
