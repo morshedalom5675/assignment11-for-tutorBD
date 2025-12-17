@@ -1,33 +1,45 @@
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import React from "react";
 import { FaWallet } from "react-icons/fa";
 import { MdDoneOutline } from "react-icons/md";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const Payments = () => {
-  // ডামি পেমেন্ট ডেটা
-  const dummyPayments = [
-    {
-      id: "TXN1001",
-      amount: 7000,
-      date: "2025-11-20",
-      tutor: "Rahim Khan",
-      status: "Successful",
-    },
-    {
-      id: "TXN1002",
-      amount: 4800,
-      date: "2025-10-25",
-      tutor: "Nusrat Jahan",
-      status: "Successful",
-    },
-  ];
+  
+  // const dummyPayments = [
+  //   {
+  //     id: "TXN1001",
+  //     amount: 7000,
+  //     date: "2025-11-20",
+  //     tutor: "Rahim Khan",
+  //     status: "Successful",
+  //   },
+  //   {
+  //     id: "TXN1002",
+  //     amount: 4800,
+  //     date: "2025-10-25",
+  //     tutor: "Nusrat Jahan",
+  //     status: "Successful",
+  //   },
+  // ];
 
+  const { data: payments = [], isLoading } = useQuery({
+    queryKey: ["payments"],
+    queryFn: async () => {
+      const res = await axios(`${import.meta.env.VITE_API_URL}/payment`);
+      return res.data;
+    },
+  });
+  console.log(payments)
+  if(isLoading) return <LoadingSpinner/>
   return (
     <div className="p-4 sm:p-8 bg-white rounded-lg shadow-xl">
       <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b pb-3">
         <FaWallet className="inline-block mr-2 text-warning" /> Payment History
       </h2>
 
-      {dummyPayments.length === 0 ? (
+      {payments.length === 0 ? (
         <div className="text-center p-10 bg-gray-50 rounded-lg border">
           <p className="text-lg text-gray-600">No payment records found.</p>
         </div>
@@ -44,12 +56,12 @@ const Payments = () => {
               </tr>
             </thead>
             <tbody>
-              {dummyPayments.map((payment) => (
-                <tr key={payment.id}>
-                  <td className="font-bold">{payment.id}</td>
-                  <td>{payment.tutor}</td>
+              {payments.map((payment) => (
+                <tr key={payment._id}>
+                  <td className="font-bold">{payment.transactionId}</td>
+                  <td>{payment.tutorName}</td>
                   <td>{payment.amount}</td>
-                  <td>{payment.date}</td>
+                  <td>{payment.paymentAt}</td>
                   <td>
                     <span className="badge badge-success text-white flex items-center">
                       <MdDoneOutline className="mr-1" /> {payment.status}

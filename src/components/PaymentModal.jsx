@@ -8,17 +8,21 @@ const PaymentModal = ({ isOpen, closeModal, tutor }) => {
   const {
     tutorPhoto,
     tutorName,
+    _id,
     tutorEmail,
     tuitionId,
     expectedSalary,
     qualification,
   } = tutor || {};
+  console.log(tuitionId)
+  console.log(_id)
 
   const handlePayment = async () => {
     const tutorInfo = {
       tutorName,
       tutorEmail,
       tutorPhoto,
+      applicationId:_id,
       tuitionId,
       expectedSalary,
       student: {
