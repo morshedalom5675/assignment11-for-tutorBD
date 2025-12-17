@@ -1,140 +1,136 @@
 import React from "react";
 import {
   FaChalkboardTeacher,
-  FaCalendarAlt,
-  FaUserGraduate,
   FaPhoneAlt,
+  FaEnvelope,
+  FaIdBadge,
+  FaCalendarAlt,
 } from "react-icons/fa";
-import { MdOutlineAttachMoney, MdOutlineLocationOn } from "react-icons/md";
-// import useAuth from "../../../hooks/useAuth"; 
+import {
+  MdOutlineAttachMoney,
+  MdOutlineCastForEducation,
+} from "react-icons/md";
+import useAuth from "../../../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import { Link } from "react-router";
 
 const OngoingTuitions = () => {
-//   const { user } = useAuth();
+    const { user } = useAuth();
+    
+    const { data: ongoingApplications = [], isLoading } = useQuery({
+        queryKey: ["ongoingApplications"],
+        queryFn: async () => {
+          const res = await axios(`${import.meta.env.VITE_API_URL}/applications?email=${user.email}`);
+          return res.data;
+        },
+      });
+      if (isLoading) return <LoadingSpinner />;
 
-  // ডামি ডেটা (আসল ডেটা API থেকে আসবে যেখানে status === 'approved')
-  const ongoingData = [
-    {
-      id: "101",
-      studentName: "Arif Ahmed",
-      studentEmail: "arif@example.com",
-      studentPhone: "017XXXXXXXX",
-      subject: "Advanced Mathematics",
-      class: "Class 12 / HSC",
-      salary: 6000,
-      location: "Dhanmondi, Dhaka",
-      startDate: "2024-05-15",
-    },
-    {
-      id: "102",
-      studentName: "Sara Karim",
-      studentEmail: "sara@example.com",
-      studentPhone: "018XXXXXXXX",
-      subject: "Physics",
-      class: "Class 10",
-      salary: 4500,
-      location: "Online / Zoom",
-      startDate: "2024-05-12",
-    },
-  ];
+ const approvedApplications = ongoingApplications.filter(approved => approved.status === 'approved')
 
   return (
     <div className="p-4 sm:p-8 bg-gray-50 min-h-full">
       {/* Header */}
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">
-        <FaChalkboardTeacher className="inline-block mr-2 text-primary" />{" "}
-        Ongoing Tuitions
-      </h1>
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 border-b pb-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">
+            <FaChalkboardTeacher className="inline-block mr-3 text-primary" />
+            Ongoing Tuitions
+          </h1>
+          <p className="text-gray-500 mt-1 text-sm">
+            List of tuitions where you are currently appointed.
+          </p>
+        </div>
+        <div className="badge badge-success gap-2 text-white p-4 mt-2 md:mt-0 font-bold">
+          Active Jobs: {ongoingApplications.length}
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        {ongoingData.map((tuition) => (
+      {/* Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {approvedApplications.map((app) => (
           <div
-            key={tuition.id}
-            className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow border-l-4 border-success overflow-hidden"
+            key={app._id}
+            className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300"
           >
+            {/* Top Bar - Visual Accent */}
+            <div className="h-2 bg-success w-full"></div>
+
             <div className="p-6">
               <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h2 className="text-xl font-bold text-gray-800">
-                    {tuition.subject}
-                  </h2>
-                  <span className="badge badge-success text-white badge-sm px-3 py-2 mt-1">
-                    Ongoing
-                  </span>
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-green-50 rounded-xl text-success border border-green-100">
+                    <MdOutlineCastForEducation size={28} />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-gray-800">
+                      Tuition Class
+                    </h2>
+                    <p className="text-xs text-gray-400 font-mono tracking-tighter">
+                      REF: {app.tuitionId}
+                    </p>
+                  </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-primary flex items-center justify-end">
-                    <MdOutlineAttachMoney /> {tuition.salary}
-                  </p>
-                  <p className="text-xs text-gray-500 uppercase font-semibold">
+                  <span className="text-2xl font-black text-primary flex items-center justify-end tracking-tight">
+                    <MdOutlineAttachMoney />
+                    {app.expectedSalary}
+                  </span>
+                  <p className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">
                     Monthly Salary
                   </p>
                 </div>
               </div>
 
-              <div className="divider my-2"></div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                {/* Left Side: Student Info */}
-                <div className="space-y-2">
-                  <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">
-                    Student Details
-                  </h3>
-                  <div className="flex items-center text-gray-700">
-                    <FaUserGraduate className="mr-3 text-secondary" />
-                    <span className="font-medium">{tuition.studentName}</span>
-                  </div>
-                  <div className="flex items-center text-gray-600 text-sm">
-                    <FaPhoneAlt className="mr-3 text-gray-400" />
-                    <span>{tuition.studentPhone}</span>
-                  </div>
+              {/* Info Section */}
+              <div className="space-y-4 mb-6">
+                <div className="flex items-center text-gray-600 bg-gray-50 p-3 rounded-lg">
+                  <FaIdBadge className="mr-3 text-secondary" />
+                  <span className="text-sm">
+                    <strong>Tutor:</strong> {app.tutorName}
+                  </span>
                 </div>
 
-                {/* Right Side: Tuition Info */}
-                <div className="space-y-2">
-                  <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">
-                    Class Info
-                  </h3>
-                  <div className="flex items-center text-gray-700">
-                    <MdOutlineLocationOn className="mr-3 text-error text-lg" />
-                    <span className="text-sm">{tuition.location}</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center text-sm text-gray-500 italic">
+                    <FaCalendarAlt className="mr-2" />
+                    Started: {new Date(app.appliedAt).toLocaleDateString()}
                   </div>
-                  <div className="flex items-center text-gray-600 text-sm">
-                    <FaCalendarAlt className="mr-3 text-gray-400" />
-                    <span>Started: {tuition.startDate}</span>
+                  <div className="flex items-center text-sm font-bold text-blue-600">
+                    <span className="bg-blue-100 px-2 py-1 rounded">
+                      Exp: {app.experience}
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="mt-6 flex flex-wrap gap-2">
-                <button className="btn btn-primary btn-sm flex-1">
-                  View Full Details
+              <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                <Link to={`/tuitionDetails/${app.tuitionId}` }className="btn btn-primary flex-1 btn-md rounded-xl">
+                  View Details
+                </Link>
+                <button className="btn btn-outline btn-success flex-1 btn-md rounded-xl">
+                  <FaPhoneAlt className="mr-2" /> Call Student
                 </button>
-                <a
-                  href={`tel:${tuition.studentPhone}`}
-                  className="btn btn-outline btn-success btn-sm"
-                >
-                  Call Student
-                </a>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* No Data State */}
-      {ongoingData.length === 0 && (
-        <div className="bg-white p-12 rounded-xl shadow-md text-center">
-          <div className="flex justify-center mb-4">
-            <div className="bg-gray-100 p-4 rounded-full text-gray-400">
-              <FaChalkboardTeacher size={48} />
-            </div>
+      {/* Empty State */}
+      {approvedApplications.length === 0 && (
+        <div className="text-center py-20">
+          <div className="text-gray-300 flex justify-center mb-4">
+            <FaChalkboardTeacher size={80} />
           </div>
-          <h3 className="text-xl font-semibold text-gray-700">
-            No Ongoing Tuitions Found
+          <h3 className="text-xl font-bold text-gray-600">
+            No active tuitions found
           </h3>
-          <p className="text-gray-500 mt-2">
-            Apply for tuitions and get approved to see them here.
+          <p className="text-gray-400">
+            Apply to more tuitions and get approved!
           </p>
         </div>
       )}

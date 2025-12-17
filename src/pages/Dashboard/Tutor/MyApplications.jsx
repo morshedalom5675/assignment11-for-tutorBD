@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import React from "react";
 import {
   FaTasks,
@@ -6,32 +8,34 @@ import {
   FaClock,
   FaCheckCircle,
   FaTimesCircle,
+  FaGraduationCap,
 } from "react-icons/fa";
-import { MdOutlineAttachMoney } from "react-icons/md";
-// import useAuth from "../../../hooks/useAuth"; 
+import { MdOutlineAttachMoney, MdCalendarToday } from "react-icons/md";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import useAuth from "../../../hooks/useAuth";
 
 const MyApplications = () => {
-//   const { user } = useAuth();
+    const { user } = useAuth();
 
-  // ডামি ডেটা (আসল ডেটা API থেকে আসবে)
-  const applications = [
-    {
-      id: "1",
-      subject: "Mathematics",
-      class: "Class 10",
-      salary: 5000,
-      status: "pending",
-      appliedDate: "2024-05-10",
+
+  const { data: myApplications = [], isLoading } = useQuery({
+    queryKey: ["applications"],
+    queryFn: async () => {
+      const res = await axios(`${import.meta.env.VITE_API_URL}/applications?email=${user.email}`);
+      return res.data;
     },
-    {
-      id: "2",
-      subject: "Physics",
-      class: "HSC",
-      salary: 7000,
-      status: "approved",
-      appliedDate: "2024-05-08",
-    },
-  ];
+  });
+  if (isLoading) return <LoadingSpinner />;
+
+
+    // date formate with gpt
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
 
   return (
     <div className="p-4 sm:p-8 bg-gray-50 min-h-full">
@@ -40,85 +44,108 @@ const MyApplications = () => {
         <FaTasks className="inline-block mr-2 text-primary" /> My Applications
       </h1>
 
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
         <div className="overflow-x-auto">
           <table className="table w-full">
             {/* Table Head */}
-            <thead className="bg-primary text-white">
+            <thead className="bg-gray-800 text-white">
               <tr>
-                <th>Subject & Class</th>
+                <th>Applied Info</th>
+                <th>Experience & Qualification</th>
                 <th>Expected Salary</th>
-                <th>Applied Date</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {applications.map((app) => (
-                <tr key={app.id} className="hover:bg-gray-50 transition-colors">
+              {myApplications.map((app) => (
+                <tr
+                  key={app._id}
+                  className="hover:bg-blue-50/30 transition-colors border-b"
+                >
+                  {/* Applied Date & ID */}
                   <td>
-                    <div className="font-bold text-gray-700">{app.subject}</div>
-                    <div className="text-sm opacity-60">{app.class}</div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-gray-700">
+                        Tuition ID: {app.tuitionId}
+                      </span>
+                      <span className="text-xs text-gray-400 flex items-center mt-1">
+                        <MdCalendarToday className="mr-1" />{" "}
+                        {formatDate(app.appliedAt)}
+                      </span>
+                    </div>
                   </td>
-                  <td className="font-semibold text-secondary">
-                    <MdOutlineAttachMoney className="inline text-xl" />
-                    {app.salary}
+
+                  {/* Qualification & Experience */}
+                  <td>
+                    <div className="flex flex-col">
+                      <div className="flex items-center text-sm font-medium text-gray-600">
+                        <FaGraduationCap className="mr-2 text-secondary" />{" "}
+                        {app.qualification}
+                      </div>
+                      <span className="text-xs text-blue-500 font-semibold bg-blue-50 px-2 py-1 rounded-md w-fit mt-1">
+                        {app.experience} Exp.
+                      </span>
+                    </div>
                   </td>
-                  <td>{app.appliedDate}</td>
+
+                  {/* Salary */}
+                  <td>
+                    <span className="text-lg font-bold text-primary flex items-center">
+                      <MdOutlineAttachMoney className="text-xl" />{" "}
+                      {app.expectedSalary}
+                    </span>
+                  </td>
+
+                  {/* Status Badge */}
                   <td>
                     {app.status === "pending" && (
-                      <span className="badge badge-warning gap-2 p-3">
-                        <FaClock /> Pending
-                      </span>
+                      <div className="badge badge-warning gap-2 font-medium py-3 px-4">
+                        <FaClock className="animate-pulse" /> Pending
+                      </div>
                     )}
                     {app.status === "approved" && (
-                      <span className="badge badge-success gap-2 p-3 text-white">
+                      <div className="badge badge-success text-white gap-2 font-medium py-3 px-4">
                         <FaCheckCircle /> Approved
-                      </span>
+                      </div>
                     )}
                     {app.status === "rejected" && (
-                      <span className="badge badge-error gap-2 p-3 text-white">
+                      <div className="badge badge-error text-white gap-2 font-medium py-3 px-4 shadow-sm">
                         <FaTimesCircle /> Rejected
-                      </span>
+                      </div>
                     )}
                   </td>
-                  <td className="flex gap-2">
-                    {/* Update and Delete button only for pending status */}
-                    <button
-                      disabled={app.status !== "pending"}
-                      className={`btn btn-sm ${
-                        app.status === "pending"
-                          ? "btn-outline btn-info"
-                          : "btn-disabled"
-                      }`}
-                      title="Update Application"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      disabled={app.status !== "pending"}
-                      className={`btn btn-sm ${
-                        app.status === "pending"
-                          ? "btn-outline btn-error"
-                          : "btn-disabled"
-                      }`}
-                      title="Delete Application"
-                    >
-                      <FaTrashAlt />
-                    </button>
+
+                  {/* Conditional Buttons */}
+                  <td>
+                    <div className="flex items-center gap-3">
+                      {app.status === "pending" ? (
+                        <>
+                          <button
+                            className="text-blue-500 hover:text-blue-700 transition-colors"
+                            title="Edit"
+                          >
+                            <FaEdit size={18} />
+                          </button>
+                          <button
+                            className="text-red-400 hover:text-red-600 transition-colors"
+                            title="Delete"
+                          >
+                            <FaTrashAlt size={18} />
+                          </button>
+                        </>
+                      ) : (
+                        <span className="text-xs italic text-gray-400">
+                          Locked
+                        </span>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
-        {/* If no applications found */}
-        {applications.length === 0 && (
-          <div className="p-10 text-center text-gray-500">
-            You haven't applied to any tuitions yet.
-          </div>
-        )}
       </div>
     </div>
   );
