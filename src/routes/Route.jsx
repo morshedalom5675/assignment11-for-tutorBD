@@ -20,6 +20,7 @@ import SuccessPayment from "../pages/Payment/SuccessPayment";
 import MyApplications from "../pages/Dashboard/Tutor/MyApplications";
 import OngoingTuitions from "../pages/Dashboard/Tutor/OngoingTuitions";
 import RevenueHistory from "../pages/Dashboard/Tutor/RevenueHistory";
+import UserManagement from "../pages/Dashboard/Admin/UserManagement";
 
 const router = createBrowserRouter([
   {
@@ -94,17 +95,21 @@ const router = createBrowserRouter([
         Component: Payments,
       },
       {
-        path: '/dashboard/tutor/my-applications',
-        Component:MyApplications
+        path: "/dashboard/tutor/my-applications",
+        Component: MyApplications,
       },
       {
-        path: '/dashboard/tutor/ongoing-tuitions',
-        Component:OngoingTuitions
+        path: "/dashboard/tutor/ongoing-tuitions",
+        Component: OngoingTuitions,
       },
       {
-        path: '/dashboard/tutor/revenue-history',
-        Component:RevenueHistory
-      }
+        path: "/dashboard/tutor/revenue-history",
+        Component: RevenueHistory,
+      },
+      {
+        path: "/dashboard/admin/user-management",
+        Component: UserManagement,
+      },
     ],
   },
 ]);
