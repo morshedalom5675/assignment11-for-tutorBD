@@ -17,11 +17,7 @@ const TuitionDetails = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
   const { id } = useParams();
-  const {
-    data: plant = [],
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data: plant = [], isLoading } = useQuery({
     queryKey: ["tuition", id],
     queryFn: async () => {
       const res = await axios(`${import.meta.env.VITE_API_URL}/tuitions/${id}`);
@@ -122,8 +118,12 @@ const TuitionDetails = () => {
               Apply as Tutor
             </button>
 
-            <ApplyModal tuitionId={id} isOpen={isOpen} closeModal={() => setIsOpen(false)} />
-            
+            <ApplyModal
+              tuitionId={id}
+              isOpen={isOpen}
+              closeModal={() => setIsOpen(false)}
+            />
+
             <button className="btn btn-outline btn-primary px-6 rounded-lg">
               Save / Bookmark
             </button>
