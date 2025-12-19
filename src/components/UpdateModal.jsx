@@ -7,10 +7,10 @@ import { FaUserEdit, FaEnvelope, FaUserTag } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 const UpdateModal = ({ isOpen, closeModal, userData }) => {
-    const { name, email, image } = userData || {};
-    
-    const queryClient = useQueryClient();
-    
+  const { name, email, image } = userData || {};
+
+  const queryClient = useQueryClient();
+
   const { mutateAsync } = useMutation({
     mutationFn: async (userInfo) =>
       axios.patch(
@@ -28,13 +28,16 @@ const UpdateModal = ({ isOpen, closeModal, userData }) => {
     },
   });
 
-  const { register, handleSubmit } = useForm();
+    const { register, handleSubmit } = useForm();
+    
   const onSubmit = (data) => {
     const userInfo = {
       role: data.role,
     };
     mutateAsync(userInfo);
-  };
+    };
+    
+    
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -106,7 +109,11 @@ const UpdateModal = ({ isOpen, closeModal, userData }) => {
 
                 {/* Buttons */}
                 <div className="flex justify-end gap-3 mt-4">
-                  <button type="button" onClick={closeModal} className="btn btn-outline">
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="btn btn-outline"
+                  >
                     Close
                   </button>
                   <button className="btn btn-primary">Edit User</button>

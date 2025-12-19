@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
 import {
@@ -10,22 +10,54 @@ import {
   FaUserEdit,
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+// import LoadingSpinner from "../../../components/LoadingSpinner";
 import UpdateModal from "../../../components/UpdateModal";
+import Swal from "sweetalert2";
 
 const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
-  const { data: users = [], isLoading } = useQuery({
-    queryKey: ["users"],
+  const { data: users = [] } = useQuery({
+    queryKey: ["users",searchText],
     queryFn: async () => {
-      const res = await axios(`${import.meta.env.VITE_API_URL}/users`);
+      const res = await axios(`${import.meta.env.VITE_API_URL}/users?searchText=${searchText}`);
       return res.data;
     },
   });
 
-  if (isLoading) return <LoadingSpinner />;
+  const queryClient = useQueryClient();
+  const { mutateAsync } = useMutation({
+    mutationFn: async (id) =>
+      axios.delete(`${import.meta.env.VITE_API_URL}/users/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["users"]);
+      Swal.fire({
+        title: "Deleted!",
+        text: "User has been deleted.",
+        icon: "success",
+      });
+    },
+  });
+
+  const handleDelete = (user) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mutateAsync(user._id);
+      }
+    });
+  };
+
+  // if (isLoading) return <LoadingSpinner />;
 
   return (
     <div className="p-4 sm:p-8 bg-gray-50 min-h-screen">
@@ -45,6 +77,7 @@ const UserManagement = () => {
 
         <div className="relative w-full md:w-80">
           <input
+            onChange={(e) => setSearchText(e.target.value)}
             type="text"
             placeholder="Search by name or email..."
             className="input input-bordered w-full pl-12 rounded-2xl focus:outline-primary border-none shadow-sm h-12 bg-white"
@@ -115,7 +148,10 @@ const UserManagement = () => {
                 <FaUserEdit /> Edit Info
               </button>
 
-              <button className="btn btn-sm btn-ghost btn-circle text-red-400 hover:bg-red-50 hover:text-red-500">
+              <button
+                onClick={() => handleDelete(user)}
+                className="btn btn-sm btn-ghost btn-circle text-red-400 hover:bg-red-50 hover:text-red-500"
+              >
                 <FaTrashAlt size={16} />
               </button>
             </div>

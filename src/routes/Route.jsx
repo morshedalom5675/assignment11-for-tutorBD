@@ -21,12 +21,15 @@ import MyApplications from "../pages/Dashboard/Tutor/MyApplications";
 import OngoingTuitions from "../pages/Dashboard/Tutor/OngoingTuitions";
 import RevenueHistory from "../pages/Dashboard/Tutor/RevenueHistory";
 import UserManagement from "../pages/Dashboard/Admin/UserManagement";
+import TuitionManagement from "../pages/Dashboard/Admin/TuitionManagement";
+import ErrorPage from "../components/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
     hydrateFallbackElement: <LoadingSpinner></LoadingSpinner>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,
@@ -109,6 +112,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/admin/user-management",
         Component: UserManagement,
+      },
+      {
+        path: "/dashboard/admin/tuition-management",
+        Component: TuitionManagement,
       },
     ],
   },
