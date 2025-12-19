@@ -17,7 +17,7 @@ const TuitionDetails = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
   const { id } = useParams();
-  const { data: plant = [], isLoading } = useQuery({
+  const { data: tuition = [], isLoading } = useQuery({
     queryKey: ["tuition", id],
     queryFn: async () => {
       const res = await axios(`${import.meta.env.VITE_API_URL}/tuitions/${id}`);
@@ -33,7 +33,7 @@ const TuitionDetails = () => {
     location,
     budget,
     daysPerWeek,
-  } = plant || {};
+  } = tuition || {};
   if (isLoading) return <LoadingSpinner></LoadingSpinner>;
   return (
     <div className="max-w-5xl mx-auto p-5 mt-6 mb-12">
@@ -119,7 +119,7 @@ const TuitionDetails = () => {
             </button>
 
             <ApplyModal
-              tuitionId={id}
+              tuition={tuition}
               isOpen={isOpen}
               closeModal={() => setIsOpen(false)}
             />

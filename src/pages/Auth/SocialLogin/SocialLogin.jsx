@@ -18,8 +18,8 @@ const SocialLogin = () => {
           // create user to data base
           const userInfo = {
             email: res.user.email,
-            displayName: res.user.name,
-            photoURL: res.user.photoURL,
+            name: res.user.displayName,
+            image: res.user.photoURL,
             phone: "",
             role: "student",
           };

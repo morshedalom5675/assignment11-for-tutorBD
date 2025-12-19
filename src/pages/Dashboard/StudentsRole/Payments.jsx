@@ -4,8 +4,10 @@ import React from "react";
 import { FaWallet } from "react-icons/fa";
 import { MdDoneOutline } from "react-icons/md";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import useAuth from "../../../hooks/useAuth";
 
 const Payments = () => {
+  const {user} = useAuth()
   
   // const dummyPayments = [
   //   {
@@ -27,11 +29,10 @@ const Payments = () => {
   const { data: payments = [], isLoading } = useQuery({
     queryKey: ["payments"],
     queryFn: async () => {
-      const res = await axios(`${import.meta.env.VITE_API_URL}/payment`);
+      const res = await axios(`${import.meta.env.VITE_API_URL}/payment?email=${user?.email}`);
       return res.data;
     },
   });
-  console.log(payments)
   if(isLoading) return <LoadingSpinner/>
   return (
     <div className="p-4 sm:p-8 bg-white rounded-lg shadow-xl">

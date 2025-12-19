@@ -6,8 +6,10 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 import { useState } from "react";
 import PaymentModal from "../../../components/PaymentModal";
 import RejectModal from "../../../components/RejectModal";
+import useAuth from "../../../hooks/useAuth";
 
 const AppliedTutors = () => {
+  const {user}=useAuth()
   const [isOpen, setIsOpen] = useState(false);
   const [rejectModalIsOpen, setRejectModalIsOpen] = useState(false);
   const [selectedTutor, setSelectedTutor] = useState(null);
@@ -15,7 +17,7 @@ const AppliedTutors = () => {
   const { data: applications = [], isLoading } = useQuery({
     queryKey: ["applications"],
     queryFn: async () => {
-      const res = await axios(`${import.meta.env.VITE_API_URL}/applications`);
+      const res = await axios(`${import.meta.env.VITE_API_URL}/applications?email=${user?.email}`);
       return res.data;
     },
   });

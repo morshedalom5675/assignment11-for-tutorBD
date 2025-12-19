@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const ApplyModal = ({ isOpen, closeModal, tuitionId }) => {
+const ApplyModal = ({ isOpen, closeModal, tuition }) => {
   const { user } = useAuth();
   const {
     register,
@@ -26,6 +26,7 @@ const ApplyModal = ({ isOpen, closeModal, tuitionId }) => {
     },
   });
 
+  console.log(tuition);
   const submitForm = (data) => {
     const { tutorName, tutorEmail, qualification, experience, expectedSalary } =
       data;
@@ -33,7 +34,13 @@ const ApplyModal = ({ isOpen, closeModal, tuitionId }) => {
       tutorName,
       tutorEmail,
       tutorPhoto: user?.photoURL,
-      tuitionId,
+      tuitionId: tuition?._id,
+      studentName: tuition?.name,
+      studentEmail: tuition?.email,
+      subject: tuition?.subject,
+      studentPhone: tuition?.phone,
+      level: tuition?.level,
+      location: tuition?.location,
       qualification,
       experience,
       expectedSalary: Number(expectedSalary),
@@ -43,6 +50,7 @@ const ApplyModal = ({ isOpen, closeModal, tuitionId }) => {
     mutateAsync(tutorData);
     closeModal();
   };
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={closeModal}>

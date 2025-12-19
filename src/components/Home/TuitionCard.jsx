@@ -12,7 +12,7 @@ import {
 import { Link } from "react-router";
 
 const TuitionCard = ({ tuition }) => {
-  // স্ট্যাটাস অনুযায়ী কালার সেট করার লজিক
+  
   const statusStyles = {
     pending: "bg-orange-50 text-orange-600 border-orange-100",
     approved: "bg-green-50 text-green-600 border-green-100",
