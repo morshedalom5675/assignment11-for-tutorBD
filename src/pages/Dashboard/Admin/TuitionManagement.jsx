@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
 import {
@@ -17,6 +17,7 @@ import {
   MdTimer,
 } from "react-icons/md";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import Swal from "sweetalert2";
 
 const TuitionManagement = () => {
   const { data: tuitions = [], isLoading } = useQuery({
@@ -27,8 +28,75 @@ const TuitionManagement = () => {
     },
   });
 
-  if (isLoading) return <LoadingSpinner />;
+  // admin approve user post here
+  const queryClient = useQueryClient();
+  const { mutateAsync: mutateApprove } = useMutation({
+    mutationFn: async (id) => {
+      const res = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/approved-tuition/${id}`
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      // Invalidate the parent applications query to refresh UI
+      queryClient.invalidateQueries(["tuitions"]);
+      Swal.fire({
+        title: "Approved!",
+        text: "Tuition has been approved.",
+        icon: "success",
+      });
+    },
+  });
+  const handleApprovedTuition = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Approved it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mutateApprove(id);
+      }
+    });
+  };
 
+  const { mutateAsync: mutateReject } = useMutation({
+    mutationFn: async (id) => {
+      const res = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/reject-tuition/${id}`
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      // Invalidate the parent applications query to refresh UI
+      queryClient.invalidateQueries(["tuitions"]);
+      Swal.fire({
+        title: "Reject!",
+        text: "Tuition has been rejected.",
+        icon: "success",
+      });
+    },
+  });
+  const handleRejectTuition = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Reject it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mutateReject(id);
+      }
+    });
+  };
+
+  if (isLoading) return <LoadingSpinner />;
   return (
     <div className="p-4 sm:p-8 bg-gray-50 min-h-screen">
       {/* Header Section */}
@@ -138,11 +206,17 @@ const TuitionManagement = () => {
                 <div className="flex lg:flex-col justify-center gap-3 border-t lg:border-t-0 lg:border-l border-gray-100 pt-6 lg:pt-0 lg:pl-10 min-w-[180px]">
                   {post.status === "pending" ? (
                     <>
-                      <button className="btn bg-success hover:bg-green-600 text-white border-none rounded-2xl px-8 shadow-lg shadow-green-100 font-bold normal-case group">
+                      <button
+                        onClick={() => handleApprovedTuition(post._id)}
+                        className="btn bg-success hover:bg-green-600 text-white border-none rounded-2xl px-8 shadow-lg shadow-green-100 font-bold normal-case group"
+                      >
                         <FaCheck className="group-hover:scale-125 transition-transform" />{" "}
                         Approve
                       </button>
-                      <button className="btn btn-outline btn-error rounded-2xl px-8 font-bold normal-case">
+                      <button
+                        onClick={() => handleRejectTuition(post._id)}
+                        className="btn btn-outline btn-error rounded-2xl px-8 font-bold normal-case"
+                      >
                         <FaTimes /> Reject
                       </button>
                     </>

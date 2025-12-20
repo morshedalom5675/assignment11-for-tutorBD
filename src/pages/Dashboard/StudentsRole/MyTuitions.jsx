@@ -5,8 +5,12 @@ import useAuth from "../../../hooks/useAuth";
 import axios from "axios";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import Swal from "sweetalert2";
+import { useState } from "react";
+import EditPostModal from "../../../components/EditpostModal";
 
 const MyTuitions = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectTuition,setSelectTuition]=useState(null)
   const { user } = useAuth() || {};
   const queryClient = useQueryClient();
 
@@ -103,6 +107,7 @@ const MyTuitions = () => {
                       <FaInfoCircle className="text-blue-500" />
                     </button>
                     <button
+                      onClick={()=>{setIsOpen(true),setSelectTuition(tuition)}}
                       className="btn btn-sm btn-ghost tooltip"
                       data-tip="Edit Post"
                     >
@@ -122,6 +127,11 @@ const MyTuitions = () => {
           </table>
         </div>
       )}
+      <EditPostModal
+        isOpen={isOpen}
+        closeModal={() => setIsOpen(false)}
+        tuition={selectTuition}
+      ></EditPostModal>
     </div>
   );
 };

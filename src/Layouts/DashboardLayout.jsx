@@ -31,7 +31,7 @@ const DashboardLayout = () => {
 
     // --- STUDENT DASHBOARD LINKS ---
 
-    ...(role.role === "student"
+    ...(role === "student"
       ? [
           {
             title: "My Tuitions",
