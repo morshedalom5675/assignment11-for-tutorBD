@@ -6,7 +6,7 @@ import TutorCard from "../../components/Home/Tutorcard";
 import { Search, Filter, UserCheck } from "lucide-react";
 
 const Tutors = () => {
-  // ১. স্টেটগুলো ডিক্লেয়ার করা
+ 
   const [searchText, setSearchText] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [sortSalary, setSortSalary] = useState("");
@@ -19,11 +19,10 @@ const Tutors = () => {
     },
   });
 
-  // ২. ফিল্টারিং লজিক (useMemo ব্যবহার করা হয়েছে পারফরম্যান্সের জন্য)
   const filteredApplications = useMemo(() => {
     let result = [...applications];
 
-    // সার্চ লজিক (নাম, সাবজেক্ট বা লোকেশন দিয়ে সার্চ)
+   
     if (searchText) {
       result = result.filter(
         (app) =>
@@ -33,12 +32,11 @@ const Tutors = () => {
       );
     }
 
-    // সাবজেক্ট ফিল্টার
     if (selectedSubject) {
       result = result.filter((app) => app.subject === selectedSubject);
     }
 
-    // স্যালারি সর্টিং
+   
     if (sortSalary === "lowToHigh") {
       result.sort((a, b) => a.expectedSalary - b.expectedSalary);
     } else if (sortSalary === "highToLow") {
@@ -48,7 +46,6 @@ const Tutors = () => {
     return result;
   }, [applications, searchText, selectedSubject, sortSalary]);
 
-  // ইউনিক সাবজেক্ট লিস্ট বের করা (ড্রপডাউনের জন্য)
   const categories = [...new Set(applications.map((app) => app.subject))];
 
   if (isLoading) return <LoadingSpinner />;
