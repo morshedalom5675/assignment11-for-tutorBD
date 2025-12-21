@@ -24,6 +24,9 @@ import UserManagement from "../pages/Dashboard/Admin/UserManagement";
 import TuitionManagement from "../pages/Dashboard/Admin/TuitionManagement";
 import ErrorPage from "../components/ErrorPage";
 import AdminReports from "../pages/Dashboard/Admin/AdminReports";
+import TutorRoute from "./TutorRoute";
+import AdminRoute from "./AdminRoute";
+import DashboardHome from "../pages/Dashboard/CommonItems/DashboardHome";
 
 const router = createBrowserRouter([
   {
@@ -76,51 +79,119 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    Component: DashboardLayout,
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
     children: [
       {
+        index: true,
+        element: (
+          <PrivateRoute>
+            <DashboardHome></DashboardHome>
+          </PrivateRoute>
+        ),
+      },
+      {
         path: "/dashboard/profile",
-        Component: ProfileSettings,
+        element: (
+          <PrivateRoute>
+            <ProfileSettings />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/student/my-tuitions",
-        Component: MyTuitions,
+        element: (
+          <PrivateRoute>
+            <MyTuitions />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/student/post-tuition",
-        Component: PostTuition,
+        element: (
+          <PrivateRoute>
+            <PostTuition />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/student/applied-tutors",
-        Component: AppliedTutors,
+        element: (
+          <PrivateRoute>
+            <AppliedTutors />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/student/payments",
-        Component: Payments,
+        element: (
+          <PrivateRoute>
+            <Payments />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/tutor/my-applications",
-        Component: MyApplications,
+        element: (
+          <PrivateRoute>
+            <TutorRoute>
+              <MyApplications></MyApplications>
+            </TutorRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/tutor/ongoing-tuitions",
-        Component: OngoingTuitions,
+        element: (
+          <PrivateRoute>
+            <TutorRoute>
+              <OngoingTuitions />
+            </TutorRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/tutor/revenue-history",
-        Component: RevenueHistory,
+        element: (
+          <PrivateRoute>
+            <TutorRoute>
+              <RevenueHistory></RevenueHistory>
+            </TutorRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/admin/user-management",
-        Component: UserManagement,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <UserManagement></UserManagement>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/admin/tuition-management",
-        Component: TuitionManagement,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <TuitionManagement></TuitionManagement>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/admin/reports",
-        Component: AdminReports,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AdminReports></AdminReports>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
     ],
   },
