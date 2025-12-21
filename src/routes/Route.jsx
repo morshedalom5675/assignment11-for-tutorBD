@@ -23,6 +23,7 @@ import RevenueHistory from "../pages/Dashboard/Tutor/RevenueHistory";
 import UserManagement from "../pages/Dashboard/Admin/UserManagement";
 import TuitionManagement from "../pages/Dashboard/Admin/TuitionManagement";
 import ErrorPage from "../components/ErrorPage";
+import AdminReports from "../pages/Dashboard/Admin/AdminReports";
 
 const router = createBrowserRouter([
   {
@@ -116,6 +117,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/admin/tuition-management",
         Component: TuitionManagement,
+      },
+      {
+        path: "/dashboard/admin/reports",
+        Component: AdminReports,
       },
     ],
   },
