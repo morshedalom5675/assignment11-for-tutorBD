@@ -19,7 +19,7 @@ const Tuitions = () => {
   const [filterClass, setFilterClass] = useState("");
   const [sortOrder, setSortOrder] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // প্রতি পেজে ৬টি কার্ড
+  const itemsPerPage = 6; 
 
   const { data: tuitions = [], isLoading } = useQuery({
     queryKey: ["tuition"],
@@ -31,7 +31,7 @@ const Tuitions = () => {
 
   // --- Logic for Search & Filtering (Challenge 1 & 4) ---
   const filteredTuitions = useMemo(() => {
-    let result = [...tuitions];
+    let result = tuitions.filter(t => t.status === "approved");
 
     // Search by subject or location
     if (search) {

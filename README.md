@@ -24,13 +24,13 @@ Authentication: Firebase Auth & JWT for secure role verification.
 Payment: Stripe API.
 
 🔗 Important Links
-Live Site: [Your Live Site Link]
+Live Site: [(https://assignment11-for-tuition.web.app/)]
 
-Client Repo: [Your Client Side GitHub Link]
+Client Repo: [(https://github.com/morshedalom5675/assignment11-for-tutorBD.git)]
 
-Server Repo: [Your Server Side GitHub Link]
+Server Repo: [(https://github.com/morshedalom5675/assignment11-server.git)]
 
 🔑 Demo Admin Credentials
-Email: admin@example.com
+Email: admin@gmail.com
 
-Password: 123456 (Replace with your actual demo pass)
+Password: 123456789

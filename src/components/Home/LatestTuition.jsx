@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 
 const LatestTuition = () => {
   const { data: latestTuitions = [], isLoading } = useQuery({
-    queryKey: ["latest-tuition"], // ইউনিক কি ব্যবহার করুন
+    queryKey: ["latest-tuition"],
     queryFn: async () => {
       const res = await axios(`${import.meta.env.VITE_API_URL}/latest-tuition`);
       return res.data;
@@ -40,17 +40,19 @@ const LatestTuition = () => {
 
       {/* Grid Layout with Animation */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {latestTuitions.slice(0, 6).map((tuition, index) => (
-          <motion.div
-            key={tuition._id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            viewport={{ once: true }}
-          >
-            <TuitionCard tuition={tuition} />
-          </motion.div>
-        ))}
+        {latestTuitions
+          .filter((tuition) => tuition.status === "approved") // শুধুমাত্র approved ডেটাগুলো দেখাবে
+          .map((tuition, index) => (
+            <motion.div
+              key={tuition._id}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <TuitionCard tuition={tuition} />
+            </motion.div>
+          ))}
       </div>
     </div>
   );

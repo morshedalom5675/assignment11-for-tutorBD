@@ -17,18 +17,24 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 import { Link } from "react-router";
 
 const OngoingTuitions = () => {
-    const { user } = useAuth();
-    
-    const { data: ongoingApplications = [], isLoading } = useQuery({
-        queryKey: ["ongoingApplications"],
-        queryFn: async () => {
-          const res = await axios(`${import.meta.env.VITE_API_URL}/applications?email=${user.email}`);
-          return res.data;
-        },
-      });
-      if (isLoading) return <LoadingSpinner />;
+  const { user } = useAuth();
 
- const approvedApplications = ongoingApplications.filter(approved => approved.status === 'approved')
+  const { data: ongoingApplications = [], isLoading } = useQuery({
+    queryKey: ["ongoingApplications"],
+    queryFn: async () => {
+      const res = await axios(
+        `${import.meta.env.VITE_API_URL}/ongoing-application?email=${
+          user.email
+        }`
+      );
+      return res.data;
+    },
+  });
+  if (isLoading) return <LoadingSpinner />;
+
+  const approvedApplications = ongoingApplications.filter(
+    (approved) => approved.status === "approved"
+  );
 
   return (
     <div className="p-4 sm:p-8 bg-gray-50 min-h-full">
@@ -108,7 +114,10 @@ const OngoingTuitions = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                <Link to={`/tuitionDetails/${app.tuitionId}` }className="btn btn-primary flex-1 btn-md rounded-xl">
+                <Link
+                  to={`/tuitionDetails/${app.tuitionId}`}
+                  className="btn btn-primary flex-1 btn-md rounded-xl"
+                >
                   View Details
                 </Link>
                 <button className="btn btn-outline btn-success flex-1 btn-md rounded-xl">
